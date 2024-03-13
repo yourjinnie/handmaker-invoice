@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
+import Papa from 'papaparse';
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
@@ -62,6 +63,34 @@ const Page = () => {
     }
   };
 
+
+ 
+const exportToCSV = (data) => {
+  const filteredData = data.map(({ __v, _id, ...rest }) => rest);
+
+  // Convert the filtered data to CSV
+  const csv = Papa.unparse(filteredData);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'order-report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } else {
+    alert('Your browser does not support downloading files.');
+  }
+};
+
+function report(){
+exportToCSV(Customers);
+}
+
+
+
   return (
     <>
       <div class="p-4 mx-auto container mt-5">
@@ -114,6 +143,7 @@ const Page = () => {
             </form>
           </div>
           <a href="customers/add" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">New Customer</a>
+          <button onClick={report} type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Export</button>
 
           {filteredCustomers.length > 0 ? (
             <table className="w-full mt-3 text-sm text-left rtl:text-right text-gray-500">

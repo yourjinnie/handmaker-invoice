@@ -2,6 +2,8 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Papa from 'papaparse';
+
 
 const Page = () => {
   const [invoices, setinvoices] = useState([]);
@@ -65,6 +67,38 @@ const Page = () => {
   };
 
 
+  const exportToCSV = (data) => {
+    // Transform the data to the desired format
+    const transformedData = data.map(({ __v, _id, Products, ...rest }) => ({
+      ...rest,
+      Products: Products.map(({ productId, quantity }) => `${productId} - ${quantity}`),
+    }));
+  
+    // Convert the transformed data to CSV
+    const csv = Papa.unparse(transformedData);
+  
+    // Create a Blob and download link
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+  
+    // Trigger the download
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'invoices-report.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert('Your browser does not support downloading files.');
+    }
+  };
+  
+function report(){
+  exportToCSV(invoices);
+}
+
+
 
   return (
     <>
@@ -118,7 +152,7 @@ const Page = () => {
             </form>
           </div>
           {/* <a href="/admin/orders" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">New Invoice</a> */}
-
+          <button onClick={report} type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Export Report</button>
           {filteredinvoices.length > 0 ? (
             <table className="w-full mt-3 text-sm text-left rtl:text-right text-gray-500">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">

@@ -5,6 +5,7 @@ import Products from "@/model/Products";
 import Customers from "@/model/Customers";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
+import Payments from "@/model/Payments";
 
 const handler = async (req, res) => {
     if (req.method === "POST") {
@@ -45,6 +46,15 @@ const handler = async (req, res) => {
                         .json({ success: false, msg: "OrderID not found." });
                 }
                 return res.json({ success: true, msg: "OrderID deleted successfully." });
+            }
+            else if (delType === 'payments') {
+                const result = await Payments.deleteOne({ PaymentID: req.body.id });
+                if (result.deletedCount === 0) {
+                    return res
+                        .status(404)
+                        .json({ success: false, msg: "PAyment not found." });
+                }
+                return res.json({ success: true, msg: "PAyment ID deleted successfully." });
             }
             else if (delType === 'invoice') {
                 const result = await Invoices.deleteOne({ OrderID: req.body.id });

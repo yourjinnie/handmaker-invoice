@@ -69,6 +69,42 @@ const Page = () => {
   const [Pincode, setPincode] = useState("")
 
 
+  function addCustomer() {
+    // Fetch data from the API
+    const postData = {
+      CustomerID: CustomerID,
+      CustomerName: CustomerName,
+      CustomerPhone: CustomerPhone,
+      CustomerEmail: CustomerEmail,
+    };
+
+
+    fetch("/api/addCustomer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    }).then((response) => response.json())
+      .then((data) => {
+        setmsg(data.msg)
+        if (data.success) {
+          console.log(data.customer);
+          location.reload();
+          setCustomerName(data.customer.CustomerName)
+          setCustomerPhone(data.customer.CustomerPhone)
+          setCustomerEmail(data.customer.CustomerEmail)
+        } else {
+          console.error("API request failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+
+
 
   const handleCustomerSelection = (event) => {
     const selectedValue = event.target.value;
@@ -258,7 +294,17 @@ const Page = () => {
 
             <div className="mb-5">
               <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Select or type Customer ID</label>
-              <input type="text" id="countries" onChange={handleCustomerSelection} list="country-list" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  id="countries"
+                  onChange={handleCustomerSelection}
+                  list="country-list"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <button data-modal-target="customer-modal" data-modal-toggle="customer-modal" className="ml-2.5 bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">+</button>
+              </div>
+
               <datalist id="country-list">
                 {CustomersList.map((customer) => (
                   <option key={customer._id} value={`${customer.CustomerID} | ${customer.CustomerName} | ${customer.CustomerPhone} | ${customer.CustomerEmail}`} />
@@ -336,7 +382,7 @@ const Page = () => {
 
 
         </div>
-        <button onClick={handleAddRow} className="mt-4 bg-blue-500 text-white px-4 py-1 rounded">+</button>
+        {/* <button onClick={handleAddRow} className="mt-4 bg-blue-500 text-white px-4 py-1 rounded">New Row +</button> */}
 
         <table className="w-full border-collapse mt-4">
           <thead>
@@ -366,6 +412,7 @@ const Page = () => {
                 </td>
                 <td className="border py-2 px-4">
                   <button onClick={() => handleDeleteRow(index)} className="bg-red-500 text-white px-4 py-2 rounded">X</button>
+                  <button onClick={handleAddRow} className="bg-blue-500 ms-1 text-white px-4 py-2 rounded">+</button>
                 </td>
               </tr>
             ))}
@@ -387,6 +434,100 @@ const Page = () => {
 
 
         </div>
+
+
+        <div id="customer-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow border-4">
+              <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                <h3 class="text-xl font-semibold text-gray-900">
+                  Add New Customer
+                </h3>
+                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-hide="customer-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div class="p-4 md:p-5">
+                <form class="space-y-4" action="#">
+                  <div class="max-w-sm mx-auto rounded-lg p-1">
+                    {!msg ? ("") : (<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                      {msg}
+                    </div>)}
+                    <div class="mb-5">
+                      <label for="id" class="block mb-2 text-sm font-medium text-gray-900">
+                        Customer ID
+                      </label>
+                      <input
+                        value={CustomerID}
+                        onChange={(e) => setCustomerID(e.target.value)}
+                        type="text"
+                        id="id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        required
+                      />
+                    </div>
+                    <div class="mb-5">
+                      <label
+                        for="name"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                      >
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={CustomerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        id="name"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+                        required
+                      />
+                    </div>
+                    <div class="mb-5">
+                      <label
+                        for="class"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        value={CustomerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        type="text"
+                        id="class"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+                        placeholder="9999928938"
+                        required
+                      />
+                    </div>
+                    <div class="mb-5">
+                      <label
+                        for="Contact"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                      >
+                        Email
+                      </label>
+                      <input
+                        id="Contact"
+                        value={CustomerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+                        placeholder="exampkle@email.in"
+                        required
+                      />
+                    </div>
+
+                  </div>
+                  <button onClick={addCustomer} type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add New Customer</button>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
 
         <div id="tracking-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -477,9 +618,9 @@ const Page = () => {
 
                       <option value="" disabled>Select</option>
                       <option value="credit_card">Credit Card</option>
-                      <option value="credit_card">Cash</option>
+                      <option value="cash">Cash</option>
                       <option value="debit_card">Debit Card</option>
-                      <option value="debit_card">UPI</option>
+                      <option value="UPI">UPI</option>
                       <option value="net_banking">Net Banking</option>
                     </select>
                   </div>
@@ -498,9 +639,19 @@ const Page = () => {
                     <input value={PaymentChannel} onChange={(e) => setPaymentChannel(e.target.value)} type="text" name="paytmChannel" id="paytmChannel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Paytm Channel" required />
                   </div>
                   <div>
-                    <label for="paymentDate" class="block mb-2 text-sm font-medium text-gray-900">Payment Date</label>
-                    <input value={PaymentDate} onChange={(e) => setPaymentDate(e.target.value)} type="text" name="paymentDate" id="paymentDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Payment Date" required />
-                  </div>
+  <label for="paymentDate" class="block mb-2 text-sm font-medium text-gray-900">Payment Date</label>
+  <input 
+    value={PaymentDate} 
+    onChange={(e) => setPaymentDate(e.target.value)} 
+    type="date" 
+    name="paymentDate" 
+    id="paymentDate" 
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+    placeholder="Enter Payment Date" 
+    required 
+  />
+</div>
+
                   <div>
                     <label for="orderAmount" class="block mb-2 text-sm font-medium text-gray-900">Payment Amount</label>
                     <input value={OrderAmount} onChange={(e) => setOrderAmount(e.target.value)} type="text" name="orderAmount" id="orderAmount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Payment Amount" required />

@@ -19,7 +19,7 @@ const handler = async (req, res) => {
             }
             console.log(req.body);
 
-            const existingCard = await Payments.findOne({ OrderID: req.body.OrderID });
+            const existingCard = await Payments.findOne({ PaymentID: req.body.PaymentID });
             const checkCustomer = await Orders.findOne({ OrderID: req.body.OrderID });
 
             if (existingCard) {
@@ -29,6 +29,7 @@ const handler = async (req, res) => {
 
             const newCard = new Payments({
                 OrderID: req.body.OrderID,
+                PaymentID: req.body.PaymentID,
                 PaymentMode: req.body.PaymentMode,
                 PaymentStatus: req.body.PaymentStatus,
                 PaymentChannel: req.body.PaymentChannel,

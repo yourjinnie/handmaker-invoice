@@ -51,6 +51,20 @@ const Page = () => {
     }
   };
 
+
+  async function deleteMe(paymentid) {
+    const fetch_api = await fetch("/api/delete/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({deltype : "payments", id: paymentid})
+    });
+
+    const data = await fetch_api.json();
+    if (data.success) {
+      location.reload();
+    }
+  };
+
   return (
     <>
       <div class="p-4 mx-auto container mt-5">
@@ -109,16 +123,25 @@ const Page = () => {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3">
+                    Payment ID
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     Order ID
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Payment Status
+                    Payment Mode
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Tracking URL
+                    Status
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Date
+                    Channel
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                   Payment Date 
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                   Action
                   </th>
                   {/* <th scope="col" className="px-6 py-3">
                     Action
@@ -136,18 +159,20 @@ const Page = () => {
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      {customer.OrderID}
+                      {customer.PaymentID}
                     </th>
+                    <td className="px-6 py-4">{customer.OrderID}</td>
+                    <td className="px-6 py-4">{customer.PaymentMode}</td>
                     <td className="px-6 py-4">{customer.PaymentStatus}</td>
                     <td className="px-6 py-4">{customer.PaymentChannel}</td>
                     <td className="px-6 py-4">{customer.PaymentDate}</td>
                     <td className="px-6 py-4">
-                      {/* <a
-                        href={`Payments/edit?id=${customer.CustomerID}`}
-                        className="font-medium text-blue-600 hover:underline"
+                    <a
+                      onClick={()=>(deleteMe(customer.PaymentID))}
+                        className="font-medium text-red-600 hover:underline"
                       >
-                        Edit
-                      </a> */}
+                        {"| "}Delete{" | "}
+                      </a>
                     </td>
                   </tr>
                 ))}

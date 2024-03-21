@@ -1,45 +1,55 @@
-
-import { parse } from "cookie";  import jwt from "jsonwebtoken";
+import { parse } from "cookie";
+import jwt from "jsonwebtoken";
 import Products from "@/model/Products";
 import connectDb from "../../middleware/mongoose";
 
+// Function to generate product ID in series
+const generateProductID = async () => {
+  // Find the count of existing products
+  const count = await Products.countDocuments();
+  // Generate the next product ID based on the count
+  const nextID = `P${(count + 1).toString().padStart(3, "0")}`;
+  return nextID;
+};
 
 const handler = async (req, res) => {
-
   if (req.method == "POST") {
     try {
       const cookies = parse(req.headers.cookie || "");
       const token = cookies.admin_access_token;
       let decoded = await jwt.verify(token, process.env.TOKEN_ADMIN);
-      if (!decoded._id==process.env.ADMIN_PASSWORD) {
+      if (!decoded._id == process.env.ADMIN_PASSWORD) {
         return res
           .status(403)
           .json({ success: false, errors: "Unable to Authenticate" });
       }
       console.log(req.body);
 
-      const existingCard = await Products.findOne({ ProductID: req.body.ProductID });
+      // Generate the next product ID
+      const nextProductID = await generateProductID();
 
-      if (existingCard) {
-        // If cardID already exists, return an error response
+      const existingProduct = await Products.findOne({ ProductID: nextProductID });
+
+      if (existingProduct) {
+        // If productID already exists, return an error response
         return res.status(400).json({ success: false, msg: "Product ID already exists." });
       }
 
-      const newCard = new Products({
-        ProductID: req.body.ProductID,
+      const newProduct = new Products({
+        ProductID: nextProductID,
         ProductName: req.body.ProductName,
         ProductPrice: req.body.ProductPrice,
         ProductStock: req.body.ProductStock,
       });
 
-      await newCard.save();
+      await newProduct.save();
       console.log("okay");
-      return res.status(200).json({ success: true, msg: "Product Added Successfuly.." });
+      return res.status(200).json({ success: true, msg: "Product Added Successfully." });
     } catch (err) {
       console.error(err);
       res
         .status(500)
-        .json({ success: false, msg: "Server error..Contact the Developers." });
+        .json({ success: false, msg: "Server error. Contact the Developers." });
     }
   }
 };

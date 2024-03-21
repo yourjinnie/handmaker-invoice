@@ -80,7 +80,7 @@ const Page = () => {
         {!msg ? ("") : (<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
           {msg}
         </div>)}
-        <div class="mb-5">
+        {/* <div class="mb-5">
           <label for="id" class="block mb-2 text-sm font-medium text-gray-900">
             Customer ID
           </label>
@@ -92,7 +92,7 @@ const Page = () => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             required
           />
-        </div>
+        </div> */}
         <div class="mb-5">
           <label
             for="name"
@@ -122,7 +122,7 @@ const Page = () => {
             type="text"
             id="class"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            placeholder="10A"
+            placeholder="8253873893"
             required
           />
         </div>
@@ -138,7 +138,7 @@ const Page = () => {
             value={CustomerEmail}
             onChange={(e) => setCustomerEmail(e.target.value)}
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            placeholder="27657265"
+            placeholder="examplew@jf"
             required
           />
         </div>

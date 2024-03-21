@@ -5,8 +5,8 @@ const CustomerSchema = new mongoose.Schema(
   {
     CustomerID: { type: String, required: true, unique: true },
     CustomerName: { type: String },
-    CustomerPhone: { type: String },
-    CustomerEmail: { type: String },
+    CustomerPhone: { type: String, required: true, unique: true },
+    CustomerEmail: { type: String, required: true, unique: true },
   },
   { collection: "all-Customers" },
   { timestamps: true }

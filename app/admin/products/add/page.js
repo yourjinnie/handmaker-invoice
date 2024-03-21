@@ -81,7 +81,7 @@ const Page = () => {
         {!msg ? ("") : (<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
           {msg}
         </div>)}
-        <div class="mb-5">
+        {/* <div class="mb-5">
           <label for="id" class="block mb-2 text-sm font-medium text-gray-900">
             Product ID
           </label>
@@ -93,7 +93,7 @@ const Page = () => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             required
           />
-        </div>
+        </div> */}
         <div class="mb-5">
           <label
             for="name"

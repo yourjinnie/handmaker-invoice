@@ -132,7 +132,7 @@ const Page = () => {
                     Payment Mode
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Status
+                    Amount
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Channel
@@ -163,7 +163,7 @@ const Page = () => {
                     </th>
                     <td className="px-6 py-4">{customer.OrderID}</td>
                     <td className="px-6 py-4">{customer.PaymentMode}</td>
-                    <td className="px-6 py-4">{customer.PaymentStatus}</td>
+                    <td className="px-6 py-4">₹{customer.PaymentAmount}</td>
                     <td className="px-6 py-4">{customer.PaymentChannel}</td>
                     <td className="px-6 py-4">{customer.PaymentDate}</td>
                     <td className="px-6 py-4">

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Paymentschema = new mongoose.Schema(
   {
     PaymentID: { type: String, required: true, unique: true },
+    PaymentNo: { type: String, required: true, unique: true },
     OrderID: { type: String },
     PaymentMode: { type: String },
     PaymentStatus: { type: String },

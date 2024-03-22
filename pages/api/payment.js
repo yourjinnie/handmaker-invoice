@@ -4,6 +4,18 @@ import connectDb from "../../middleware/mongoose";
 import Invoices from "@/model/Invoices";
 import Orders from "@/model/Orders";
 import Payments from "@/model/Payments";
+const mongoose = require("mongoose");
+
+const LastPaymentNumber = mongoose.model('LastPaymentNumber', {
+    value: { type: Number, default: 0 }
+});
+
+// 2. Function to generate the next Payment ID in the series
+const generatePaymentID = async () => {
+    const lastPaymentNumberDoc = await LastPaymentNumber.findOneAndUpdate({}, { $inc: { value: 1 } }, { new: true, upsert: true });
+    return `PAY${String(lastPaymentNumberDoc.value).padStart(3, '0')}`;
+};
+
 
 
 const handler = async (req, res) => {
@@ -22,24 +34,22 @@ const handler = async (req, res) => {
             const existingCard = await Payments.findOne({ PaymentID: req.body.PaymentID });
             const checkCustomer = await Orders.findOne({ OrderID: req.body.OrderID });
 
-            if (existingCard) {
-                // If cardID already exists, return an error response
-                return res.status(400).json({ success: false, msg: "Payments ID already exists." });
-            }
-
+       
+            const nextPaymentID = await generatePaymentID();
             const newCard = new Payments({
+                PaymentID: nextPaymentID,
+                PaymentNo: req.body.PaymentNo,
                 OrderID: req.body.OrderID,
-                PaymentID: req.body.PaymentID,
                 PaymentMode: req.body.PaymentMode,
                 PaymentStatus: req.body.PaymentStatus,
                 PaymentChannel: req.body.PaymentChannel,
                 PaymentDate: req.body.PaymentDate,
-                PaymentAmount: req.body.OrderAmount
+                PaymentAmount: req.body.PaymentAmount
             });
 
             await newCard.save();
             console.log("okay");
-            return res.status(200).json({ success: true, msg: "Payments Added Successfuly.." });
+            return res.status(200).json({ success: true, msg: `${newCard.PaymentID} Payments Added Successfuly` ,PaymentID : newCard.PaymentID });
         } catch (err) {
             console.error(err);
             res

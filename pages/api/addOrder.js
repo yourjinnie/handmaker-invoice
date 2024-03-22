@@ -34,6 +34,7 @@ const handler = async (req, res) => {
       const newCard = new Orders({
         OrderID: req.body.OrderID,
         CustomerID: req.body.CustomerID,
+        Status: req.body.TrackingStatus,
         Products: req.body.Products,
         SalesChannel: req.body.SalesChannel,
         Address: req.body.Address,

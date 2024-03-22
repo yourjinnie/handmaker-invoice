@@ -7,7 +7,7 @@ import Select from 'react-select';
 
 const Page = () => {
 
-
+  const [totalSum, setTotalSum] = useState(0);
   const [rows, setRows] = useState([
     { productId: '', quantity: 1 },
   ]);
@@ -37,6 +37,17 @@ const Page = () => {
   };
 
 
+  const calculateTotalSum = () => {
+    let sum = 0;
+    rows.forEach(row => {
+      const product = ProductList.find(product => product.ProductID === row.productId);
+      const total = row.quantity * (product ? product.ProductPrice : 0);
+      sum += total;
+    });
+    setTotalSum(sum);
+  };
+
+
 
 
   const [CustomersList, setCustomersList] = useState([]);
@@ -48,8 +59,8 @@ const Page = () => {
   const [CustomerPhone, setCustomerPhone] = useState("")
   const [CustomerEmail, setCustomerEmail] = useState("")
 
-
-  const [TrackingID, setTrackingID] = useState("")
+  const [TotalAmount, setTotalAmount] = useState("")
+  const [TrackingNo, setTrackingNo] = useState("")
   const [cost, setCost] = useState('');
   const [trackingUrl, setTrackingUrl] = useState('');
   const [TrackingStatus, setTrackingStatus] = useState('pending');
@@ -61,13 +72,14 @@ const Page = () => {
   const [PaymentChannel, setPaymentChannel] = useState('');
   const [PaymentDate, setPaymentDate] = useState('');
   const [OrderAmount, setOrderAmount] = useState('');
-  const [PaymentID, setPaymentID] = useState("")
-
+  const [PaymentID, setPaymentID] = useState([])
+  const [TrackingID, setTrackingID] = useState([])
 
   const [SalesChannel, setSalesChannel] = useState("")
   const [Address, setAddress] = useState("")
   const [Pincode, setPincode] = useState("")
 
+  const [PaymentNo, setPaymentNo] = useState("")
 
   function addCustomer() {
     // Fetch data from the API
@@ -103,7 +115,9 @@ const Page = () => {
       });
   };
 
-
+  useEffect(() => {
+    calculateTotalSum();
+  }, [rows, ProductList]);
 
 
   const handleCustomerSelection = (event) => {
@@ -176,6 +190,8 @@ const Page = () => {
       Pincode: Pincode,
       PaymentID: PaymentID,
       TrackingID: TrackingID,
+      TrackingStatus: TrackingStatus,
+      Total: totalSum
     }
     console.log(postData);
     fetch("/api/addOrder", {
@@ -200,10 +216,9 @@ const Page = () => {
 
   function saveTrackingDetails() {
     const postData = {
-      TrackingID: TrackingID,
+      TrackingNo: TrackingNo,
       TrackingCost: cost,
       trackingUrl: trackingUrl,
-      TrackingStatus: TrackingStatus,
       TrackingCourier: courierName,
       OrderID: OrderID
     }
@@ -221,6 +236,10 @@ const Page = () => {
         setmsg(data.msg)
         if (data.success) {
           console.log(data);
+          const updatedTrackingID = [...TrackingID];
+          updatedTrackingID.push(data.TrackingID);
+          setTrackingID(updatedTrackingID);
+
         } else {
           console.error("API request failed");
         }
@@ -247,6 +266,7 @@ const Page = () => {
     const postData = {
       OrderID: OrderID,
       PaymentID: PaymentID,
+      PaymentNo: PaymentNo,
       PaymentMode: PaymentMode,
       PaymentStatus: PaymentStatus,
       PaymentChannel: PaymentChannel,
@@ -267,6 +287,9 @@ const Page = () => {
         setmsg(data.msg)
         if (data.success) {
           console.log(data);
+          const updatedPaymentID = [...PaymentID];
+          updatedPaymentID.push(data.PaymentID);
+          setPaymentID(updatedPaymentID);
         } else {
           console.error("API request failed");
         }
@@ -356,18 +379,33 @@ const Page = () => {
               </div>
 
               {/* Sales Channel */}
+
+
+
               <div className="flex-1">
                 <label htmlFor="sc" className="block mb-2 text-sm font-medium text-gray-900">Sales Channel</label>
-                <input value={SalesChannel} onChange={(e) => setSalesChannel(e.target.value)} id="sc" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0" placeholder="" required />
+                <select
+                  value={SalesChannel}
+                  onChange={(e) => setSalesChannel(e.target.value)}
+                  id="sc"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+                  required
+                >
+                  <option value="">Select Sales Channel</option>
+                  <option value="Amazon">Amazon</option>
+                  <option value="Flipkart">Flipkart</option>
+                  <option value="Shopify">Shopify</option>
+                </select>
               </div>
-            </div>
 
+
+            </div>
 
             <div className="mb-5 flex space-x-4">
               {/* Tracking ID */}
               <div className="flex-1">
-                <label htmlFor="trackingID" className="block mb-2 text-sm font-medium text-gray-900">Tracking ID</label>
-                <input disabled value={TrackingID} onChange={(e) => setTrackingID(e.target.value)} id="trackingID" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0" placeholder="" required />
+                <label htmlFor="TrackingNo" className="block mb-2 text-sm font-medium text-gray-900">Tracking ID</label>
+                <input disabled value={TrackingID} onChange={(e) => setTrackingID(e.target.value)} id="TrackingNo" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0" placeholder="" required />
               </div>
 
               {/* Tracking Cost */}
@@ -375,6 +413,18 @@ const Page = () => {
                 <label htmlFor="trackingCost" className="block mb-2 text-sm font-medium text-gray-900">Payment ID</label>
                 <input disabled value={PaymentID} onChange={(e) => setPaymentID(e.target.value)} id="trackingCost" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0" placeholder="" required />
               </div>
+
+
+
+            </div>
+            <div>
+              <label for="status" class="block mb-2 text-sm font-medium text-gray-900">Current Order Status</label>
+              <select value={TrackingStatus} onChange={(e) => setTrackingStatus(e.target.value)} name="status" id="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                <option value="pending">Pending</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="delivered">Return</option>
+              </select>
             </div>
           </div>
 
@@ -383,6 +433,7 @@ const Page = () => {
 
         </div>
         {/* <button onClick={handleAddRow} className="mt-4 bg-blue-500 text-white px-4 py-1 rounded">New Row +</button> */}
+        <div className="text-2xl">Total Sum: ₹{totalSum}</div>
 
         <table className="w-full border-collapse mt-4">
           <thead>
@@ -424,13 +475,18 @@ const Page = () => {
 
 
 
+
         <div className="flex">
 
+          <a href="/admin/products/add" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2" type="button">
+            New Product
+          </a>
           <button data-modal-target="tracking-modal" data-modal-toggle="tracking-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2" type="button">
             Add Tracking Details
           </button>
           <button data-modal-target="payment-modal" data-modal-toggle="payment-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2" type="button"> Add Payment Details </button>
           <button onClick={save} class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2" type="button">Save & Create Order </button>
+
 
 
         </div>
@@ -548,8 +604,8 @@ const Page = () => {
                 <form class="space-y-4" action="#">
 
                   <div>
-                    <label for="trackingId" class="block mb-2 text-sm font-medium text-gray-900">Tracking ID</label>
-                    <input value={TrackingID} onChange={(e) => setTrackingID(e.target.value)} type="text" name="trackingId" id="trackingId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Tracking ID" required />
+                    <label for="TrackingNo" class="block mb-2 text-sm font-medium text-gray-900">Tracking ID</label>
+                    <input value={TrackingNo} onChange={(e) => setTrackingNo(e.target.value)} type="text" name="TrackingNo" id="TrackingNo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Tracking ID" required />
                   </div>
                   <div>
                     <label for="cost" class="block mb-2 text-sm font-medium text-gray-900">Cost</label>
@@ -559,15 +615,7 @@ const Page = () => {
                     <label for="cost" class="block mb-2 text-sm font-medium text-gray-900">Tracking URL</label>
                     <input value={trackingUrl} onChange={(e) => setTrackingUrl(e.target.value)} type="text" name="cost" id="cost" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Url" required />
                   </div>
-                  <div>
-                    <label for="status" class="block mb-2 text-sm font-medium text-gray-900">Status</label>
-                    <select value={TrackingStatus} onChange={(e) => setTrackingStatus(e.target.value)} name="status" id="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                      <option value="pending">Pending</option>
-                      <option value="shipped">Shipped</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="delivered">Return</option>
-                    </select>
-                  </div>
+
 
                   <div>
                     <label for="courierName" class="block mb-2 text-sm font-medium text-gray-900">Courier Name</label>
@@ -609,8 +657,8 @@ const Page = () => {
               <div class="p-4 md:p-5">
                 <form class="space-y-4" action="#">
                   <div>
-                    <label for="orderID" class="block mb-2 text-sm font-medium text-gray-900">Payment ID</label>
-                    <input value={PaymentID} onChange={(e) => setPaymentID(e.target.value)} type="text" name="orderID" id="orderID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Order ID" required />
+                    <label for="orderID" class="block mb-2 text-sm font-medium text-gray-900">Payment No</label>
+                    <input value={PaymentNo} onChange={(e) => setPaymentNo(e.target.value)} type="text" name="orderID" id="orderID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Payment No" required />
                   </div>
                   <div>
                     <label for="paymentMode" class="block mb-2 text-sm font-medium text-gray-900">Payment Mode</label>
@@ -625,7 +673,7 @@ const Page = () => {
                     </select>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label for="paymentMode" class="block mb-2 text-sm font-medium text-gray-900">Payment Status</label>
                     <select value={PaymentStatus} onChange={(e) => setPaymentStatus(e.target.value)} name="paymentMode" id="paymentMode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
                       <option value="" disabled>Select</option>
@@ -633,24 +681,29 @@ const Page = () => {
                       <option value="full">Full</option>
 
                     </select>
-                  </div>
+                  </div> */}
                   <div>
                     <label for="paytmChannel" class="block mb-2 text-sm font-medium text-gray-900">Paytm Channel</label>
-                    <input value={PaymentChannel} onChange={(e) => setPaymentChannel(e.target.value)} type="text" name="paytmChannel" id="paytmChannel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Paytm Channel" required />
+                    <select value={PaymentChannel} onChange={(e) => setPaymentChannel(e.target.value)} name="paytmChannel" id="paytmChannel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                      <option value="" disabled>Select Paytm Channel</option>
+                      <option value="Paytm">Paytm</option>
+                      <option value="PhonePay">PhonePay</option>
+                      {/* Add more options as needed */}
+                    </select>
                   </div>
                   <div>
-  <label for="paymentDate" class="block mb-2 text-sm font-medium text-gray-900">Payment Date</label>
-  <input 
-    value={PaymentDate} 
-    onChange={(e) => setPaymentDate(e.target.value)} 
-    type="date" 
-    name="paymentDate" 
-    id="paymentDate" 
-    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-    placeholder="Enter Payment Date" 
-    required 
-  />
-</div>
+                    <label for="paymentDate" class="block mb-2 text-sm font-medium text-gray-900">Payment Date</label>
+                    <input
+                      value={PaymentDate}
+                      onChange={(e) => setPaymentDate(e.target.value)}
+                      type="date"
+                      name="paymentDate"
+                      id="paymentDate"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      placeholder="Enter Payment Date"
+                      required
+                    />
+                  </div>
 
                   <div>
                     <label for="orderAmount" class="block mb-2 text-sm font-medium text-gray-900">Payment Amount</label>

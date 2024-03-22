@@ -4,6 +4,17 @@ import Invoices from "@/model/Invoices";
 import Orders from "@/model/Orders";
 import { parse } from "cookie"; import jwt from "jsonwebtoken";
 import Tracking from "@/model/Tracking";
+const mongoose = require("mongoose");
+
+const LastTrackingNumber = mongoose.model('LastTrackingNumber', {
+    value: { type: Number, default: 0 }
+});
+
+// 2. Function to generate the next tracking ID in the series
+const generateTrackingID = async () => {
+    const lastTrackingNumberDoc = await LastTrackingNumber.findOneAndUpdate({}, { $inc: { value: 1 } }, { new: true, upsert: true });
+    return `TRC${String(lastTrackingNumberDoc.value).padStart(3, '0')}`;
+};
 
 
 const handler = async (req, res) => {
@@ -26,9 +37,10 @@ const handler = async (req, res) => {
                 // If cardID already exists, return an error response
                 return res.status(400).json({ success: false, msg: "Tracking ID already exists." });
             }
-
+            const nextTrackingID = await generateTrackingID();
             const newCard = new Tracking({
-                TrackingID: req.body.TrackingID,
+                TrackingID: nextTrackingID,
+                TrackingNo: req.body.TrackingNo,
                 TrackingCost: req.body.cost,
                 trackingUrl: req.body.trackingUrl,
                 TrackingStatus: req.body.TrackingStatus,
@@ -38,7 +50,9 @@ const handler = async (req, res) => {
 
             await newCard.save();
             console.log("okay");
-            return res.status(200).json({ success: true, msg: "Tracking Added Successfuly.." });
+            console.log(newCard);
+            console.log("okay");
+            return res.status(200).json({ success: true, msg: `${newCard.TrackingID} Tracking Added Successfuly`, TrackingID : newCard.TrackingID });
         } catch (err) {
             console.error(err);
             res

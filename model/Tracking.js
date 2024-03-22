@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 const Trackingchema = new mongoose.Schema(
   {
-    OrderID: { type: String, required: true, unique: true },
-    TrackingID: { type: String },
+    OrderID: { type: String, required: true},
+    TrackingID: { type: String, required: true, unique: true },
+    TrackingNo: { type: String, required: true, unique: true },
     TrackingCost: { type: String },
     trackingUrl: { type: String },
     TrackingStatus: { type: String },

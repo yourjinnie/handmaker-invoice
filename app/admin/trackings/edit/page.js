@@ -1,27 +1,27 @@
 "use client"
 import Navbar from "@/components/Navbar";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 
 const Page = () => {
   const searchParams = useSearchParams();
 
   const search = searchParams.get('id')
-  const [CustomerID, setcustomerID] = useState(search);
-  const [CustomerName, setCustomerName] = useState("");
+  const [TrackingID, setTrackingID] = useState(search);
 
-  const [CustomerPhone, setCustomerPhone] = useState("");
-  const [CustomerEmail, setCustomerEmail] = useState("");
+  const [TrackingCost, setTrackingCost] = useState("")
+  const [TrackingURL, setTrackingURL] = useState("")
+  const [OrderAmount, setOrderAmount] = useState('');
   const [msg, setmsg] = useState("")
 
   const postData = {
-    customerid: CustomerID,
+    trackingid: TrackingID,
     // Add other properties if needed
   };
   useEffect(() => {
     auth();
-    fetch("/api/getCustomer", {
+    fetch("/api/getTracking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,10 +30,9 @@ const Page = () => {
     }).then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log(data.customer);
-          setCustomerName(data.customer.CustomerName)
-          setCustomerPhone(data.customer.CustomerPhone)
-          setCustomerEmail(data.customer.CustomerEmail)
+          console.log(data.Tracking);
+          setTrackingCost(data.tracking.TrackingCost)
+          setTrackingURL(data.tracking.trackingUrl)
         } else {
           console.error("API request failed");
         }
@@ -55,22 +54,27 @@ const Page = () => {
       router.push("/login");
     }
   };
-
-
   function updateDetails() {
-    fetch("/api/editCustomer", {
+    const postData = {
+      TrackingID: TrackingID,
+      trackingUrl: TrackingURL,
+      TrackingCost: TrackingCost,
+    };
+
+
+    fetch("/api/editTracking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ CustomerID: CustomerID, CustomerName: CustomerName, CustomerPhone: CustomerPhone, CustomerEmail: CustomerEmail }),
+      body: JSON.stringify(postData),
     }).then((response) => response.json())
       .then((data) => {
         setmsg(data.msg)
         if (data.success) {
           console.log(data);
           setTimeout(() => {
-            window.location.href = "/admin/customers"; // Replace "/your-target-page" with the actual target page URL
+            window.location.href = "/admin/trackings"; // Replace "/your-target-page" with the actual target page URL
           }, 1000);
         } else {
           console.error("API request failed");
@@ -83,91 +87,59 @@ const Page = () => {
 
   return (
     <>
-      <div className="mt-20">
-        <h2 className="mb-5 text-2xl font-bold text-center">
-          Edit Customer Details
-        </h2>
-      </div>
-      <div class="max-w-sm mx-auto border border-3 rounded-lg p-5">
-        {!msg ? ("") : (<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
-          {msg}
-        </div>)}
-        <div class="mb-5">
-          <label for="id" class="block mb-2 text-sm font-medium text-gray-900">
-            Customer ID
-          </label>
-          <input
-            value={CustomerID}
-            type="text"
-            disabled
-            id="id"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            required
-          />
-        </div>
-        <div class="mb-5">
-          <label
-            for="name"
-            class="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            value={CustomerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            id="name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            required
-          />
-        </div>
-        <div class="mb-5">
-          <label
-            for="class"
-            class="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Phone Number
-          </label>
-          <input
-            value={CustomerPhone}
-            onChange={(e) => setCustomerPhone(e.target.value)}
-            type="text"
-            id="class"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            placeholder="10A"
-            required
-          />
-        </div>
-        <div class="mb-5">
-          <label
-            for="Contact"
-            class="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Email
-          </label>
-          <input
-            id="Contact"
-            value={CustomerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            placeholder="27657265"
-            required
-          />
-        </div>
+      <div className="mt-20  mx-auto container">
 
-        {/* <div class="flex items-start mb-5">
-    <div class="flex items-center h-5">
-      <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" required/>
-    </div>
-    <label for="remember" class="ms-2 text-sm font-medium text-gray-900">Remember me</label>
-  </div> */}
-        <button
+        <div id="Tracking-modal" class="ms-60 overflow-y-auto overflow-x-hidden justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow border-4">
+              <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                <h3 class="text-xl font-semibold text-gray-900"> Tracking Details for order </h3>
+                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center " data-modal-hide="Tracking-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div class="p-4 md:p-5">
+                <form class="space-y-4" action="#">
+                  <div>
+                    <label for="orderID" disabled class="block mb-2 text-sm font-medium text-gray-900">Tracking ID</label>
+                    <input disabled value={TrackingID} onChange={(e) => setTrackingID(e.target.value)} type="text" name="orderID" id="orderID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Tracking No" required />
+                  </div>
 
-          onClick={updateDetails}
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-        >
-          Save
-        </button>
+                  {/* <div>
+                    <label for="TrackingMode" class="block mb-2 text-sm font-medium text-gray-900">Tracking Status</label>
+                    <select value={TrackingStatus} onChange={(e) => setTrackingStatus(e.target.value)} name="TrackingMode" id="TrackingMode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                    <option value="" disabled>Select</option>
+                    <option value="partial">Partial</option>
+                    <option value="full">Full</option>
+
+                    </select>
+                  </div> */}
+
+
+
+                  <div>
+                    <label for="orderAmount" class="block mb-2 text-sm font-medium text-gray-900">Tracking Amount</label>
+                    <input value={TrackingCost} onChange={(e) => setTrackingCost(e.target.value)} type="text" name="orderAmount" id="orderAmount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Tracking Amount" required />
+                  </div>
+                  <div>
+                    <label for="orderAmount" class="block mb-2 text-sm font-medium text-gray-900">Tracking URL</label>
+                    <input value={TrackingURL} onChange={(e) => setTrackingURL(e.target.value)} type="text" name="orderAmount" id="orderAmount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter Tracking Amount" required />
+                  </div>
+
+
+                  {!msg ? ("") : (
+                    <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+                      {msg}
+                    </div>)}
+                  <button onClick={updateDetails} type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save Tracking Details</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

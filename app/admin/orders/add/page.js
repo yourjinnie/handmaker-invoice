@@ -217,10 +217,11 @@ const Page = () => {
   function saveTrackingDetails() {
     const postData = {
       TrackingNo: TrackingNo,
-      TrackingCost: cost,
+      cost: cost,
       trackingUrl: trackingUrl,
       TrackingCourier: courierName,
       OrderID: OrderID
+      
     }
 
     console.log(postData);

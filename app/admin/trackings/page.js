@@ -50,6 +50,23 @@ const Page = () => {
     }
   };
 
+
+  async function deleteMe(trackingID) {
+    const fetch_api = await fetch("/api/delete/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deltype: "tracking", id: trackingID })
+    });
+
+    const data = await fetch_api.json();
+    if (data.success) {
+      location.reload();
+    }
+  };
+
+
+
+
   return (
     <>
       <div class="p-4 mx-auto container mt-5">
@@ -117,7 +134,10 @@ const Page = () => {
                     Tracking URL
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Status
+                    Cost
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Action
                   </th>
                   {/* <th scope="col" className="px-6 py-3">
                     Action
@@ -139,14 +159,19 @@ const Page = () => {
                     </th>
                     <td className="px-6 py-4">{customer.OrderID}</td>
                     <td className="px-6 py-4">{customer.trackingUrl}</td>
-                    <td className="px-6 py-4">{customer.TrackingStatus}</td>
+                    <td className="px-6 py-4">₹{customer.TrackingCost}</td>
                     <td className="px-6 py-4">
-                      {/* <a
-                        href={`Trackings/edit?id=${customer.CustomerID}`}
+                      <a href={`/admin/trackings/edit/?id=${customer.TrackingID}`}
                         className="font-medium text-blue-600 hover:underline"
                       >
-                        Edit
-                      </a> */}
+                        {"| "}Edit{" | "}
+                      </a>
+                      <a
+                        onClick={() => (deleteMe(customer.PaymentID))}
+                        className="font-medium text-red-600 hover:underline"
+                      >
+                        {"| "}Delete{" | "}
+                      </a>
                     </td>
                   </tr>
                 ))}

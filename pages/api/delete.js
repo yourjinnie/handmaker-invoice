@@ -6,6 +6,7 @@ import Customers from "@/model/Customers";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import Payments from "@/model/Payments";
+import Tracking from "@/model/Tracking";
 
 const handler = async (req, res) => {
     if (req.method === "POST") {
@@ -49,6 +50,15 @@ const handler = async (req, res) => {
             }
             else if (delType === 'payments') {
                 const result = await Payments.deleteOne({ PaymentID: req.body.id });
+                if (result.deletedCount === 0) {
+                    return res
+                        .status(404)
+                        .json({ success: false, msg: "PAyment not found." });
+                }
+                return res.json({ success: true, msg: "PAyment ID deleted successfully." });
+            }
+            else if (delType === 'tracking') {
+                const result = await Tracking.deleteOne({ PaymentID: req.body.id });
                 if (result.deletedCount === 0) {
                     return res
                         .status(404)

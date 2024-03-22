@@ -65,6 +65,9 @@ const Page = () => {
     }
   };
 
+
+
+  
   return (
     <>
       <div class="p-4 mx-auto container mt-5">
@@ -167,7 +170,12 @@ const Page = () => {
                     <td className="px-6 py-4">{customer.PaymentChannel}</td>
                     <td className="px-6 py-4">{customer.PaymentDate}</td>
                     <td className="px-6 py-4">
-                    <a
+                    <a href={`/admin/payments/edit/?id=${customer.PaymentID}`}
+                        className="font-medium text-blue-600 hover:underline"
+                      >
+                        {"| "}Edit{" | "}
+                      </a>
+                      <a
                       onClick={()=>(deleteMe(customer.PaymentID))}
                         className="font-medium text-red-600 hover:underline"
                       >

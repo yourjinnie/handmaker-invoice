@@ -18,8 +18,6 @@ const Page = () => {
     (card) =>
       card.OrderID.toLowerCase().includes(searchQueryLowercase) ||
       card.CustomerID.toLowerCase().includes(searchQueryLowercase) ||
-      card.TrackingID.toLowerCase().includes(searchQueryLowercase) ||
-      card.PaymentID.toLowerCase().includes(searchQueryLowercase) ||
       card.SalesChannel.toLowerCase().includes(searchQueryLowercase)
   );
   useEffect(() => {

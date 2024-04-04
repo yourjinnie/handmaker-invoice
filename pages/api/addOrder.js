@@ -41,6 +41,8 @@ const handler = async (req, res) => {
         Pincode: req.body.Pincode,
         TrackingID: req.body.TrackingID,
         PaymentID: req.body.PaymentID,
+        TaxType : req.body.TaxType,
+        GST : req.body.GST,
         Total: req.body.Total,
       });
 

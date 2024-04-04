@@ -13,6 +13,8 @@ const OrderSchema = new mongoose.Schema(
     TrackingID: { type: Array },
     PaymentID: { type: Array },
     Total: { type: String },
+    TaxType : { type: String },
+    GST : { type: String },
   },
   { collection: "all-Orders" },
   { timestamps: true }

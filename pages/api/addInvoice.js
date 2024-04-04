@@ -28,18 +28,7 @@ const handler = async (req, res) => {
         // If cardID already exists, return an error response
         return res.status(400).json({ success: false, msg: "Order ID Not found" });
       }
-
-      const generateRandomID = () => {
-        // Generate a random 8-character alphanumeric string as the ID
-        return Math.random().toString(36).substring(2, 10);
-      };
-
-      let isUnique = false;
-      let randomID;
-    
-      // Keep generating new random IDs until a unique one is found
-  
-        randomID = generateRandomID();
+ 
     
         // Check if the generated ID already exists in the database
         const existingInvoice = await Invoices.findOne({ InvoiceID: req.body.OrderID+"inv" });
@@ -56,11 +45,16 @@ const handler = async (req, res) => {
         OrderID: req.body.OrderID,
         CustomerID: existingCard.CustomerID,
         Products: existingCard.Products,
+        Status: existingCard.Status,
         SalesChannel: existingCard.SalesChannel,
         Address: existingCard.Address,
+        Pincode: existingCard.Pincode,
         TrackingID: existingCard.TrackingID,
+        PaymentID: existingCard.PaymentID ,
+        Total:existingCard.Total,
+        TaxType : existingCard.TaxType,
+        GST : existingCard.GST,
         Date: req.body.InvoiceDate,
-        Tax: req.body.InvoiceTax
       });
     
       // Save the new invoice to the database

@@ -33,7 +33,7 @@ const Page = () => {
             .then((data) => {
                 if (data.success) {
                     console.log(data.Product);
-                    setProduct(data.Product)
+                    setProduct(data.Order)
                 } else {
                     console.error("API request failed");
                 }
@@ -164,25 +164,29 @@ const Page = () => {
             // Additional JSX for tax and total
             const additionalDetails = (
                 <div className="mt-8 flex sm:justify-end">
-                    <div className="w-full max-w-2xl sm:text-end space-y-2">
-                        <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
-                            <dl className="grid sm:grid-cols-5 gap-x-3">
-                                <dt className="col-span-3 font-semibold text-gray-800 ">Subtotal:</dt>
-                                <dd className="col-span-2 text-gray-500">₹{subtotalAmount.toFixed(2)}</dd>
-                            </dl>
+        <div className="w-full max-w-2xl sm:text-end space-y-2">
+          <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+            <dl className="grid sm:grid-cols-5 gap-x-3">
+              <dt className="col-span-3 font-semibold text-gray-800 ">Subtotal:</dt>
+              <dd className="col-span-2 text-gray-500">₹{subtotalAmount.toFixed(2)}</dd>
+            </dl>
 
-                            <dl className="grid sm:grid-cols-5 gap-x-3">
-                                <dt className="col-span-3 font-semibold text-gray-800  ">Tax({Tax}%):</dt>
-                                <dd className="col-span-2 text-gray-500">₹{taxAmount.toFixed(2)}</dd>
-                            </dl>
+            {/* <dl className="grid sm:grid-cols-5 gap-x-3">
+              <dt className="col-span-3 font-semibold text-gray-800  ">Tax:</dt>
+              <dd className="col-span-2 text-gray-500">₹{taxAmount.toFixed(2)}</dd>
+            </dl> */}
 
-                            <dl className="grid sm:grid-cols-5 gap-x-3">
-                                <dt className="col-span-3 font-semibold text-gray-800  ">Total Amount</dt>
-                                <dd className="col-span-2 text-gray-500">₹{totalAmount.toFixed(2)}</dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
+            <dl className="grid sm:grid-cols-5 gap-x-3">
+              <dt className="col-span-3 font-semibold text-gray-800  ">Total GST</dt>
+              <dd className="col-span-2 text-gray-500">₹{Product.GST}</dd>
+            </dl>
+            <dl className="grid sm:grid-cols-5 gap-x-3">
+              <dt className="col-span-3 font-semibold text-gray-800  ">Total Amount</dt>
+              <dd className="col-span-2 text-gray-500">₹{Product.Total}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
             );
 
             return [orderDetails, additionalDetails];

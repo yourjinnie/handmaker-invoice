@@ -163,22 +163,7 @@ const Page = () => {
           />
         </div>
 
-        <div class="mb-5">
-          <label
-            for="Contact"
-            class="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Tax
-          </label>
-          <input
-            id="Contact"
-            value={InvoiceTax}
-            onChange={(e) => setInvoiceTax(e.target.value)}
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
-            placeholder="27657265"
-            required
-          />
-        </div>
+     
 
         {/* <div class="flex items-start mb-5">
     <div class="flex items-center h-5">

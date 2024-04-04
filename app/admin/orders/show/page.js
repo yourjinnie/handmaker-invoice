@@ -30,7 +30,7 @@ const Page = () => {
             .then((data) => {
                 if (data.success) {
                     console.log(data.Product);
-                    setProduct(data.Product)
+                    setProduct(data.Order)
                 } else {
                     console.error("API request failed");
                 }
@@ -152,8 +152,12 @@ const Page = () => {
             </dl> */}
 
             <dl className="grid sm:grid-cols-5 gap-x-3">
+              <dt className="col-span-3 font-semibold text-gray-800  ">Total GST</dt>
+              <dd className="col-span-2 text-gray-500">₹{Product.GST}</dd>
+            </dl>
+            <dl className="grid sm:grid-cols-5 gap-x-3">
               <dt className="col-span-3 font-semibold text-gray-800  ">Total Amount</dt>
-              <dd className="col-span-2 text-gray-500">₹{totalAmount.toFixed(2)}</dd>
+              <dd className="col-span-2 text-gray-500">₹{Product.Total}</dd>
             </dl>
           </div>
         </div>

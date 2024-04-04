@@ -173,10 +173,13 @@ function report(){
                     Tracking ID
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    TAX(%)
+                    GST TAX
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Date
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Total
                   </th>
                     <th scope="col" className="px-6 py-3">
                     Action
@@ -200,8 +203,9 @@ function report(){
                     <td className="px-6 py-4">{Product.Address}/-</td>
                     <td className="px-6 py-4">{Product.SalesChannel}</td>
                     <td className="px-6 py-4">{Product.TrackingID}</td>
-                    <td className="px-6 py-4">{Product.Tax}%</td>
+                    <td className="px-6 py-4">{Product.TaxType}</td>
                     <td className="px-6 py-4">{Product.Date}</td>
+                    <td className="px-6 py-4">₹{Product.Total}</td>
                     <td className="px-6 py-4">
                     <a
                         href={`/admin/invoices/edit?id=${Product.OrderID}`}

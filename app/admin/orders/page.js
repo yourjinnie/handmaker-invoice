@@ -222,12 +222,12 @@ const Page = () => {
 
                     
                     <td className="px-6 py-4">
-                      {/* <a
+                      <a
                         href={`orders/edit?id=${Product.OrderID}`}
                         className="font-medium text-blue-600 hover:underline"
                       >
                         Edit{" |"}
-                      </a> */}
+                      </a>
                       <a
                         href={`orders/show?id=${Product.OrderID}`}
                         className="font-medium text-blue-600 hover:underline"

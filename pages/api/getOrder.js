@@ -29,7 +29,7 @@ const handler = async (req, res) => {
       }
   
       // Return the details of the found card as a JSON response
-      return res.status(200).json({ success: true, Product: foundProduct });
+      return res.status(200).json({ success: true, Order: foundProduct });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ success: false, msg: "Server error. Contact the Developers." });

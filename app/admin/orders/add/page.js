@@ -8,6 +8,8 @@ import Select from 'react-select';
 const Page = () => {
 
   const [totalSum, setTotalSum] = useState(0);
+  const [GSTtax, setGSTtax] = useState("none")
+  const [TotalGST, setTotalGST] = useState(0)
   const [rows, setRows] = useState([
     { productId: '', quantity: 1 },
   ]);
@@ -44,7 +46,19 @@ const Page = () => {
       const total = row.quantity * (product ? product.ProductPrice : 0);
       sum += total;
     });
-    setTotalSum(sum);
+    if (GSTtax === "none") {
+      setTotalSum(parseFloat(sum.toFixed(2)));
+      setTotalGST(0);
+    }
+    if (GSTtax === "i_GST") {
+      setTotalSum(parseFloat((sum + (sum * 0.1)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.1).toFixed(2)));
+    }
+    if (GSTtax === "s_GST_c_GST") {
+      setTotalSum(parseFloat((sum + (sum * 0.18)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.18).toFixed(2)));
+    }
+    
   };
 
 
@@ -117,7 +131,7 @@ const Page = () => {
 
   useEffect(() => {
     calculateTotalSum();
-  }, [rows, ProductList]);
+  }, [rows, ProductList, GSTtax]);
 
 
   const handleCustomerSelection = (event) => {
@@ -191,6 +205,8 @@ const Page = () => {
       PaymentID: PaymentID,
       TrackingID: TrackingID,
       TrackingStatus: TrackingStatus,
+      TaxType : GSTtax,
+      GST : TotalGST,
       Total: totalSum
     }
     console.log(postData);
@@ -221,7 +237,7 @@ const Page = () => {
       trackingUrl: trackingUrl,
       TrackingCourier: courierName,
       OrderID: OrderID
-      
+
     }
 
     console.log(postData);
@@ -434,7 +450,11 @@ const Page = () => {
 
         </div>
         {/* <button onClick={handleAddRow} className="mt-4 bg-blue-500 text-white px-4 py-1 rounded">New Row +</button> */}
-        <div className="text-2xl">Total Sum: ₹{totalSum}</div>
+
+
+
+
+
 
         <table className="w-full border-collapse mt-4">
           <thead>
@@ -470,11 +490,23 @@ const Page = () => {
             ))}
           </tbody>
         </table>
-
-
-
-
-
+        <div className="flex items-center justify-start">
+        <select
+          value={GSTtax}
+          onChange={(e) => {
+            setGSTtax(e.target.value);
+          }}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block m-2 p-2.5"
+        >
+          <option value="none">Select GST</option>
+          <option value="i_GST">i_GST</option>
+          <option value="s_GST_c_GST">S GST + C GST</option>
+        </select>
+        <div className="text-xl">Total GST: ₹{TotalGST}</div>
+        </div>
+        <div className="flex items-center justify-end">
+          <div className="text-2xl font-semibold">Total Sum: ₹{totalSum}</div>
+        </div>
 
 
         <div className="flex">

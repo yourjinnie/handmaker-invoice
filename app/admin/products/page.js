@@ -157,6 +157,9 @@ function report(){
                     Price
                   </th>
                   <th scope="col" className="px-6 py-3">
+                    HSN 
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     Stock
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -179,6 +182,7 @@ function report(){
                     </th>
                     <td className="px-6 py-4">{Product.ProductName}</td>
                     <td className="px-6 py-4">₹{Product.ProductPrice}/-</td>
+                    <td className="px-6 py-4">{Product.ProductHSN && Product.ProductHSN || "N.A"}</td>
                     <td className="px-6 py-4">{Product.ProductStock}</td>
                     <td className="px-6 py-4">
                       <a

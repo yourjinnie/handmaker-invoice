@@ -13,11 +13,12 @@ const Page = () => {
 
   const [ProductPrice, setProductPrice] = useState("");
   const [ProductStock, setProductStock] = useState("");
+  const [ProductHSN, setProductHSN] = useState("")
+
   const [msg, setmsg] = useState("")
 
   const postData = {
     productid: ProductID,
-    // Add other properties if needed
   };
   useEffect(() => {
     auth();
@@ -34,6 +35,7 @@ const Page = () => {
           setProductName(data.Product.ProductName)
           setProductPrice(data.Product.ProductPrice)
           setProductStock(data.Product.ProductStock)
+          setProductHSN(data.Product.ProductHSN)
         } else {
           console.error("API request failed");
         }
@@ -50,7 +52,7 @@ const Page = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ProductID: ProductID, ProductName: ProductName, ProductPrice: ProductPrice, ProductStock: ProductStock }),
+      body: JSON.stringify({ ProductID: ProductID, ProductName: ProductName, ProductPrice: ProductPrice, ProductStock: ProductStock, ProductHSN:ProductHSN }),
     }).then((response) => response.json())
       .then((data) => {
         setmsg(data.msg)
@@ -155,6 +157,22 @@ const Page = () => {
           />
         </div>
 
+        <div class="mb-5">
+          <label
+            for="HSN"
+            class="block mb-2 text-sm font-medium text-gray-900"
+          >
+            HSN Number
+          </label>
+          <input
+            id="HSN"
+            value={ProductHSN}
+            onChange={(e) => setProductHSN(e.target.value)}
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+            placeholder="Enter HSN (Optional)"
+            required
+          />
+        </div>
         {/* <div class="flex items-start mb-5">
     <div class="flex items-center h-5">
       <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" required/>

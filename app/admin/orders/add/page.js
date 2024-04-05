@@ -485,10 +485,10 @@ const Page = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td className="border py-2 px-4">
-                  <select value={row.productId} onChange={(e) => handleProductChange(index, e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                  <select value={row.productId} onChange={(e) => handleProductChange(index, e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option value="" disabled>Select a product</option>
                     {ProductList.map((product) => (
-                      <option key={product._id} value={product.ProductID}>{product.ProductID}{" "}|{" "}{product.ProductName}</option>
+                      <option key={product._id} value={product.ProductID}>{product.ProductID}{" "}|{" "}{product.ProductName}{" "}|{" "}{product.ProductHSN}</option>
                     ))}
                   </select>
                 </td>

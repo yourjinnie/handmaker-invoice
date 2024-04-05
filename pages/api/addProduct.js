@@ -50,6 +50,7 @@ const handler = async (req, res) => {
         ProductName: req.body.ProductName,
         ProductPrice: req.body.ProductPrice,
         ProductStock: req.body.ProductStock,
+        ProductHSN: req.body.ProductHSN
       });
 
       await newProduct.save();

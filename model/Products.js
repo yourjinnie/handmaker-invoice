@@ -7,6 +7,7 @@ const ProductSchema = new mongoose.Schema(
     ProductName: { type: String },
     ProductPrice: { type: String },
     ProductStock: { type: String },
+    ProductHSN: { type: String },
   },
   { collection: "all-Products" },
   { timestamps: true }

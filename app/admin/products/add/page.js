@@ -13,6 +13,7 @@ const Page = () => {
 
   const [ProductPrice, setProductPrice] = useState("");
   const [ProductStock, setProductStock] = useState("");
+  const [ProductHSN, setProductHSN] = useState("")
   const [msg, setmsg] = useState("")
 
 
@@ -24,6 +25,7 @@ const Page = () => {
       ProductName: ProductName,
       ProductPrice: ProductPrice,
       ProductStock: ProductStock,
+      ProductHSN: ProductHSN,
     };
 
 
@@ -140,6 +142,23 @@ const Page = () => {
             onChange={(e) => setProductStock(e.target.value)}
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
             placeholder="27657265"
+            required
+          />
+        </div>
+
+        <div class="mb-5">
+          <label
+            for="HSN"
+            class="block mb-2 text-sm font-medium text-gray-900"
+          >
+            HSN Number
+          </label>
+          <input
+            id="HSN"
+            value={ProductHSN}
+            onChange={(e) => setProductHSN(e.target.value)}
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+            placeholder="Enter HSN (Optional)"
             required
           />
         </div>

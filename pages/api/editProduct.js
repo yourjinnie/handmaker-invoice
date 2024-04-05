@@ -21,7 +21,7 @@ const handler = async (req, res) => {
                 return res.status(400).json({ success: false, msg: "Missing required fields in the request body." });
             }
 
-            const { ProductID, ProductName, ProductPrice, ProductStock } = req.body;
+            const { ProductID, ProductName, ProductPrice, ProductStock, ProductHSN} = req.body;
 
             const forbiddenSymbols = /[^a-zA-Z0-9\s\-()]/;
 
@@ -39,6 +39,7 @@ const handler = async (req, res) => {
             foundCard.ProductPrice = ProductPrice;
             foundCard.ProductName = ProductName;
             foundCard.ProductStock = ProductStock;
+            foundCard.ProductHSN = ProductHSN;
 
             // Save the updated card to the database
             await foundCard.save();

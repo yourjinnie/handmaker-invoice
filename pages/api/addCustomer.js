@@ -5,11 +5,19 @@ import jwt from "jsonwebtoken";
 
 // Function to generate customer ID in series
 const generateCustomerID = async () => {
-  // Find the count of existing customers
-  const count = await Customers.countDocuments();
-  // Generate the next customer ID based on the count
-  const nextID = `C${(count + 1).toString().padStart(3, "0")}`;
-  return nextID;
+  try {
+    const highestCustomer = await Customers.findOne({}, { CustomerID: 1 }).sort({ CustomerID: -1 });
+    let nextID;
+    if (highestCustomer) {
+      const highestIDNumber = parseInt(highestCustomer.CustomerID.slice(1));
+      nextID = `C${(highestIDNumber + 1).toString().padStart(3, "0")}`;
+    } else {
+      nextID = "C001";
+    }
+    return nextID;
+  } catch (error) {
+    throw new Error("Error generating customer ID");
+  }
 };
 
 const handler = async (req, res) => {
@@ -38,7 +46,7 @@ const handler = async (req, res) => {
 
       await newCard.save();
       console.log("okay");
-      return res.status(200).json({ success: true, msg: "Customer Added Successfully." });
+      return res.status(200).json({ success: true, msg: `${nextCustomerID} - Customer Added Successfully.` });
     } catch (err) {
       console.error(err);
       res

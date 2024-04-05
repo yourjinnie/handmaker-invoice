@@ -5,11 +5,21 @@ import connectDb from "../../middleware/mongoose";
 
 // Function to generate product ID in series
 const generateProductID = async () => {
-  // Find the count of existing products
-  const count = await Products.countDocuments();
-  // Generate the next product ID based on the count
-  const nextID = `P${(count + 1).toString().padStart(3, "0")}`;
-  return nextID;
+  try {
+    // Find the highest existing product ID
+    const highestProduct = await Products.findOne({}, { ProductID: 1 }).sort({ ProductID: -1 });
+
+    let nextID;
+    if (highestProduct) {
+      const highestIDNumber = parseInt(highestProduct.ProductID.slice(1));
+      nextID = `P${(highestIDNumber + 1).toString().padStart(3, "0")}`;
+    } else {
+      nextID = "P001";
+    }
+    return nextID;
+  } catch (error) {
+    throw new Error("Error generating product ID");
+  }
 };
 
 const handler = async (req, res) => {

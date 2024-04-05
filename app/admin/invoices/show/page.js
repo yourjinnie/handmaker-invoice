@@ -196,13 +196,29 @@ const Page = () => {
                                 {(() => {
                                     switch (Product.TaxType) {
                                         case "sc_GST5":
+                                            return (
+                                                <>
+                                                <dt className="col-span-3 font-semibold text-gray-800">Central GST 2.5%</dt>
+                                                    <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
+                                                <dt className="col-span-3 font-semibold text-gray-800">State GST 2.5%</dt>
+                                                    <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
+                                                </>
+                                            );
                                         case "sc_GST12":
+                                            return (
+                                                <>
+                                                <dt className="col-span-3 font-semibold text-gray-800">Central GST 6%</dt>
+                                                    <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
+                                                <dt className="col-span-3 font-semibold text-gray-800">State GST 6%</dt>
+                                                    <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
+                                                </>
+                                            );
                                         case "sc_GST18":
                                             return (
                                                 <>
-                                                <dt className="col-span-3 font-semibold text-gray-800">Central GST</dt>
+                                                <dt className="col-span-3 font-semibold text-gray-800">Central GST 9%</dt>
                                                     <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
-                                                <dt className="col-span-3 font-semibold text-gray-800">State GST</dt>
+                                                <dt className="col-span-3 font-semibold text-gray-800">State GST 9%</dt>
                                                     <dd className="col-span-2 text-gray-500">₹{Product.GST / 2}</dd>
                                                 </>
                                             );

@@ -11,6 +11,7 @@ const Page = () => {
   const [OrderID, setOrderID] = useState(search)
   const [InvoiceID, setInvoiceID] = useState(search + "inv");
   const [Invoice, setInvoice] = useState('')
+  const [InvoiceNo, setInvoiceNo] = useState("")
 
   const [InvoiceDate, setInvoiceDate] = useState("");
   const [InvoiceTax, setInvoiceTax] = useState("");
@@ -25,6 +26,7 @@ const Page = () => {
       OrderID: OrderID,
       InvoiceDate: InvoiceDate,
       InvoiceTax: InvoiceTax,
+      InvoiceNo:InvoiceNo
     };
 
 
@@ -79,6 +81,7 @@ const Page = () => {
         if (data.success) {
           console.log(data.Invoice);
           setInvoice(data.Invoice);
+          setInvoiceNo(data.Invoice.InvoiceNo)
           setInvoiceDate(formatDate(data.Invoice.Date)) 
         setInvoiceTax(data.Invoice.Tax)
         } else {
@@ -141,6 +144,22 @@ const Page = () => {
             disabled
             value={OrderID}
             onChange={(e) => setInvoiceName(e.target.value)}
+            id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
+            required
+          />
+        </div>
+        <div class="mb-5">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900"
+          >
+           Invoice Number
+          </label>
+          <input
+            type="text"
+            value={InvoiceNo}
+            onChange={(e) => setInvoiceNo(e.target.value)}
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-0"
             required

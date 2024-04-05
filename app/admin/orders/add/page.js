@@ -506,35 +506,40 @@ const Page = () => {
             ))}
           </tbody>
         </table>
-        <div className="flex items-center justify-start">
-          Interstate GST : 
+        <div className="flex items-start mt-4 flex-col justify-start">
+<div>
+
+          Inter-state GST : 
         <select
           value={GSTtax}
           onChange={(e) => {
             setGSTtax(e.target.value);
           }}
-          className="me-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block m-2 p-2.5"
+          className="me-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block my-2 p-2.5"
         >
           <option value="none">No GST 0%</option>
           <option value="i_GST5">i GST - 5%</option>
           <option value="i_GST12">i GST - 12%</option>
           <option value="i_GST18">i GST - 18%</option>
         </select>
+        </div>
 
-        S+C GST : 
+        State + Central GST : 
         <select
           value={GSTtax}
           onChange={(e) => {
             setGSTtax(e.target.value);
           }}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block m-2 p-2.5"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block my-2 p-2.5"
         >
           <option value="none">No GST 0%</option>
           <option value="sc_GST5">S GST 2.5% + C GST 2.5%</option>
           <option value="sc_GST12">S GST 6% + C GST 6%</option>
           <option value="sc_GST18">S GST 18% + C GST 18%</option>
         </select>
-        <div className="text-xl">Total GST: ₹{TotalGST}</div>
+
+        <div className="text-xl mt-2">Total GST: ₹{TotalGST}</div>
+
         </div>
         <div className="flex items-center justify-end">
           <div className="text-2xl font-semibold">Total Sum: ₹{totalSum}</div>

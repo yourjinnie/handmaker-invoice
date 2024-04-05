@@ -161,7 +161,10 @@ function report(){
                     Invoice ID
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Name
+                    Order ID
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Invoice No.
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Address
@@ -200,6 +203,7 @@ function report(){
                       {Product.InvoiceID}
                     </th>
                     <td className="px-6 py-4">{Product.OrderID}</td>
+                    <td className="px-6 py-4">{Product.InvoiceNo}</td>
                     <td className="px-6 py-4">{Product.Address}/-</td>
                     <td className="px-6 py-4">{Product.SalesChannel}</td>
                     <td className="px-6 py-4">{Product.TrackingID}</td>

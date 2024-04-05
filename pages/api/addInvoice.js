@@ -43,6 +43,7 @@ const handler = async (req, res) => {
       const newCard = new Invoices({
         InvoiceID: req.body.OrderID+"inv",
         OrderID: req.body.OrderID,
+        InvoiceNo: req.body.InvoiceNo,
         CustomerID: existingCard.CustomerID,
         Products: existingCard.Products,
         Status: existingCard.Status,

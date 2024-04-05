@@ -50,15 +50,31 @@ const Page = () => {
       setTotalSum(parseFloat(sum.toFixed(2)));
       setTotalGST(0);
     }
-    if (GSTtax === "i_GST") {
-      setTotalSum(parseFloat((sum + (sum * 0.1)).toFixed(2)));
-      setTotalGST(parseFloat((sum * 0.1).toFixed(2)));
+    if (GSTtax === "i_GST5") {
+      setTotalSum(parseFloat((sum + (sum * 0.05)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.05).toFixed(2)));
     }
-    if (GSTtax === "s_GST_c_GST") {
+    if (GSTtax === "i_GST12") {
+      setTotalSum(parseFloat((sum + (sum * 0.12)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.12).toFixed(2)));
+    }
+    if (GSTtax === "i_GST18") {
       setTotalSum(parseFloat((sum + (sum * 0.18)).toFixed(2)));
       setTotalGST(parseFloat((sum * 0.18).toFixed(2)));
     }
     
+    if (GSTtax === "sc_GST5") {
+      setTotalSum(parseFloat((sum + (sum * 0.05)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.05).toFixed(2)));
+    }
+    if (GSTtax === "sc_GST12") {
+      setTotalSum(parseFloat((sum + (sum * 0.12)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.12).toFixed(2)));
+    }
+    if (GSTtax === "sc_GST18") {
+      setTotalSum(parseFloat((sum + (sum * 0.18)).toFixed(2)));
+      setTotalGST(parseFloat((sum * 0.18).toFixed(2)));
+    }
   };
 
 
@@ -491,6 +507,21 @@ const Page = () => {
           </tbody>
         </table>
         <div className="flex items-center justify-start">
+          Interstate GST : 
+        <select
+          value={GSTtax}
+          onChange={(e) => {
+            setGSTtax(e.target.value);
+          }}
+          className="me-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block m-2 p-2.5"
+        >
+          <option value="none">No GST 0%</option>
+          <option value="i_GST5">i GST - 5%</option>
+          <option value="i_GST12">i GST - 12%</option>
+          <option value="i_GST18">i GST - 18%</option>
+        </select>
+
+        S+C GST : 
         <select
           value={GSTtax}
           onChange={(e) => {
@@ -498,9 +529,10 @@ const Page = () => {
           }}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block m-2 p-2.5"
         >
-          <option value="none">Select GST</option>
-          <option value="i_GST">i_GST</option>
-          <option value="s_GST_c_GST">S GST + C GST</option>
+          <option value="none">No GST 0%</option>
+          <option value="sc_GST5">S GST 2.5% + C GST 2.5%</option>
+          <option value="sc_GST12">S GST 6% + C GST 6%</option>
+          <option value="sc_GST18">S GST 18% + C GST 18%</option>
         </select>
         <div className="text-xl">Total GST: ₹{TotalGST}</div>
         </div>
